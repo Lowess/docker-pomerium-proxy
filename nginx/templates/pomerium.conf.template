@@ -1,0 +1,18 @@
+### Pomerium endpoint
+
+upstream pomerium {
+    server ${POMERIUM_UPSTREAM};
+}
+
+server {
+    listen 443 ssl;
+    server_name  ${POMERIUM_AUTHENTICATE_SERVER_NAME}.${POMERIUM_DOMAIN} ${POMERIUM_FWDAUTH_SERVER_NAME}.${POMERIUM_DOMAIN};
+
+    ssl_certificate "${POMERIUM_SSL_CERTFICATE}";
+    ssl_certificate_key "${POMERIUM_SSL_CERTIFICATE_KEY}";
+
+    location / {
+      proxy_pass http://pomerium;
+      include /etc/nginx/proxy.conf;
+    }
+}
